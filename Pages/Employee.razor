@@ -1,0 +1,50 @@
+﻿@page "/employee/{DepartmentId}"
+@inject IEmployeeService employeeService
+
+
+@if (Employees == null)
+{
+    <p><em>Loading......</em></p>
+}
+else
+{
+    <div class="row">
+        <div class="col-md-10 offset-md-2">
+            <table class="table">
+                <tr>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                    <th>Gender</th>
+                    <th>Is Fired</th>
+                    <th>Action</th>
+                </tr>
+                @foreach (var employee in Employees)
+                {
+                    <EmployeeItem employee="@employee"></EmployeeItem>
+                }
+            </table>
+            <a href="/add-employee/@DepartmentId">Add</a>
+        </div>
+    </div>
+}
+
+
+
+
+@code{
+    [Parameter]
+    public string DepartmentId { get; set; }
+
+    public IEnumerable<ThreeBlazor.Models.Employee> Employees;
+
+
+    //[Inject]
+    //public IEmployeeService EmployeeService { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        Console.WriteLine(DepartmentId);
+        Employees = await employeeService.GetByDepartmentId(int.Parse(DepartmentId));
+        Console.WriteLine(Employees.Count());
+    }
+}

@@ -1,0 +1,18 @@
+﻿@inherits Microsoft.AspNetCore.Components.LayoutComponentBase
+
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-2">
+            <img asp-append-version="true" alt="Test" src="/images/test.gif" style="max-width:100%" />
+        </div>
+        <div class="col-md-10">
+            <span class="h3">Three Blazor</span>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            @Body
+        </div>
+    </div>
+</div>

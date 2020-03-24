@@ -1,0 +1,66 @@
+﻿@page "/add-employee/{departmentId}"
+@inject IEmployeeService employeeService
+@inject NavigationManager navigationManager
+
+<EditForm Model="@employee" OnValidSubmit="@HandleValidSubmit">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+    <div class="row form-group">
+        <div class="col-md-2 offset-md-2">
+            <label for="firstName">First Name</label>
+        </div>
+        <div class="col-md-2 offset-md-2">
+            <InputText id="firstName" class="form-control" @bind-Value="employee.FirstName" />
+        </div>
+    </div>
+    <div class="row form-group">
+        <div class="col-md-2 offset-md-2">
+            <label for="lastName">Last Name</label>
+        </div>
+        <div class="col-md-2 offset-md-2">
+            <InputText id="lasName" class="form-control" @bind-Value="employee.LastName" />
+        </div>
+    </div>
+    <div class="row form-group">
+        <div class="col-md-2 offset-md-2">
+            <label for="gender">Gender</label>
+        </div>
+        <div class="col-md-2 offset-md-2">
+            <select id="gender" class="form-control" @onchange="OnGenderSelected">
+                <option selected hidden disabled>Please select gender</option>
+                @foreach (var item in Enum.GetValues(typeof(Gender)).Cast<Gender>())
+                {
+                    <option value="@item">@item.ToString()</option>
+                }
+            </select>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-2 offset-md-2">
+            <button type="submit" class="btn btn-primary">Add</button>
+        </div>
+    </div>
+
+
+</EditForm>
+
+@code
+{
+    [Parameter]
+    public string departmentId { get; set; }
+
+    public ThreeBlazor.Models.Employee employee = new ThreeBlazor.Models.Employee();
+
+    private void OnGenderSelected(ChangeEventArgs e)
+    {
+        var gender = Enum.Parse(typeof(Gender), (string)e.Value);
+        employee.Gender = (Gender)gender;
+
+    }
+    public async Task HandleValidSubmit()
+    {
+        employee.DepartmentId = int.Parse(departmentId);
+        await employeeService.Add(employee);
+        navigationManager.NavigateTo($"/employee/{departmentId}");
+    }
+}

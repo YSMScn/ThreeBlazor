@@ -1,0 +1,49 @@
+﻿@page "/add-department"
+@inject IDepartmentService departmentService
+@inject NavigationManager navigationManager
+
+<EditForm Model="@department" OnValidSubmit="@HandleValidSubmit">
+    <DataAnnotationsValidator />
+    <ValidationSummary/>    
+    <div class="row form-group">
+        <div class="col-md-2 offset-md-2">
+            <label for="name">Name</label>
+        </div>
+        <div class="col-md-2 offset-md-2">
+            <InputText id="name" class="form-control" @bind-Value="department.Name"/>
+        </div>
+    </div>
+    <div class="row form-group">
+        <div class="col-md-2 offset-md-2">
+            <label for="location">Location</label>
+        </div>
+        <div class="col-md-2 offset-md-2">
+            <InputText id="location" class="form-control" @bind-Value="department.Location" />
+        </div>
+    </div>
+    <div class="row form-group">
+        <div class="col-md-2 offset-md-2">
+            <label for="employeeCount">EmployeeCount</label>
+        </div>
+        <div class="col-md-2 offset-md-2">
+            <InputNumber id="employeeCount" class="form-control" @bind-Value="department.EmployeeCount" />
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-2 offset-md-2">
+            <button type="submit" class="btn btn-primary">Add</button>
+        </div>
+    </div>
+
+
+</EditForm>
+
+@code
+{
+    private Department department = new Department();
+    private async Task HandleValidSubmit()
+    {
+        await departmentService.Add(department);
+        navigationManager.NavigateTo("/");
+    }
+}
